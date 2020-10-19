@@ -15,6 +15,8 @@ Tipically, executable file are updated from object files, which are made by comp
 
 The command `make` will use the makefile data and the last-modification times of the files to decide which of the files need to be updated.
 
+---
+
 ## An Introduction to Makefiles
 
 The makefile tells `make` how to compile and link a program.
@@ -46,5 +48,69 @@ A `rule` that specifies a `recipe` does not need prerequisites.
 
 Makefiles may contain more text other than rules, but all it needs are rules.
 
+### Example
 
+Make a program `edit` that depends on eight object files, which in turn depend on eight source and three header files.
+
+```makefile
+edit : main.o kbd.o command.o display.o insert.o search.o files.o utils.o
+    cc -o edit main.o kbd.o command.o display.o insert.o search.o files.o utils.o
+
+main.o : main.c defs.h
+    cc -c main.c
+
+kbd.o : kbd.c defs.h command.h
+    cc -c kbd.c
+
+command.o : command.c defs.h command.h
+    cc -c command.c
+
+display.o : display.c defs.h buffer.h
+    cc -c display.c
+
+insert.o : insert.c defs.h buffer.h
+    cc -c insert.c
+
+search.o : search.c defs.h buffer.h
+    cc -c search.c
+
+files.o : files.c defs.h buffer.h command.h
+    cc -c files.c
+
+utils.o : utils.c defs.h
+    cc -c utils.c
+
+clean :
+    rm edit main.o kbd.o command.o display.o insert.o search.o files.o utils.o
+```
+
+When a target is a file it needs to be recompiled or relinked if any of its prerequisites change.
+
+Any prerequisite that is automatically generated needs to be updated first.
+
+A recipe may follow each line that contains a target and prerequisites.
+
+These recipes say how to update the target file.
+
+Tabs distinguish recipes from other lines in the makefile.
+
+`clean` is a target that is not a file and does not have prerequisites. This is a _phony target_.
+
+---
+
+## Makefile processing
+
+Default, `make` starts with the first target (default goal). This can be changed with a special variable.
+
+In the example, the first rule is `edit` and it's a relinking rule, so before it needs to process the rules for the files that `edit` depends on, which are object files.
+
+The rules for each dependant files are processed.
+
+Before recompiling an object file, `make` considers updating its prerequisites (source and header files).
+
+To decide if to relink `edit`, it will check if the file `edit` exists, or if any of the object files is newer than it.
+
+_Thus, if we change the file insert.c and run make, make will compile that file to update insert.o, and then link edit. If we change the file command.h and run make, make will recompile the object files kbd.o, command.o and files.o and then link the file edit._
+
+Next: 2.4
 
