@@ -112,5 +112,63 @@ To decide if to relink `edit`, it will check if the file `edit` exists, or if an
 
 _Thus, if we change the file insert.c and run make, make will compile that file to update insert.o, and then link edit. If we change the file command.h and run make, make will recompile the object files kbd.o, command.o and files.o and then link the file edit._
 
-Next: 2.4
+## Variables
+
+To avoid repetition in rules we can use variables.
+
+Standard practice is to have a variable reference objects files with a name such as: objects, OBJECTS, objs, OBJS, etc...
+
+To use this variable we use the string `$(objects)`.
+
+```makefile
+objects = main.o kbd.o command.o display.o insert.o search.o files.o utils.o
+
+edit : $(objects)
+    cc -o edit $(objects)
+
+...
+
+clean :
+    rm edit $(objects)
+```
+
+## Recipes deduced by make
+
+There are implicit rules for updating some files.
+
+It can update an `.o` file from a corresondingly named `.c` file.
+
+When doing so the `.c` files are automatically used and added to the list of prerequisites.
+
+Then we can omit the `.c` file if we omit the recipe.
+
+```makefile
+...
+
+main.o : defs.h
+kbd.o : defs.h command.h
+command.o : defs.h buffer.h
+
+...
+
+.PHONY : clean
+clean :
+    rm edit $(objects)
+```
+
+If the objects of a makefile are created only by implicit rules you can group entries by their prerequisites instead of by their targets:
+
+
+```makefile
+objects = same as before...
+
+edit : $(objects)
+    cc -o edit $(objects)
+
+$(objects) : defs.h
+kbd.o command.o files.o : command.h
+display.o insert.o search.o files.o : buffer.h
+```
+
+Next 2.7
 
