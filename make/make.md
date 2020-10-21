@@ -170,5 +170,21 @@ kbd.o command.o files.o : command.h
 display.o insert.o search.o files.o : buffer.h
 ```
 
-Next 2.7
+## Cleaning the directory
+
+Use `.PHONY` to prevent interpreting `clean` as a file.
+
+```makefile
+.PHONY : clean
+clean :
+    -rm edit $(objects)
+```
+
+We don't want it to run by default, so it shouldn't go at the beginning.
+
+---
+
+## 3 Writing makefiles
+
+
 
