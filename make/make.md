@@ -186,5 +186,109 @@ We don't want it to run by default, so it shouldn't go at the beginning.
 
 ## 3 Writing makefiles
 
+`Makefiles` contain five kind of things:
 
+* _explicit rules_. Says when and how to remake one or more files (`targets`). It lists other files that the targets depend on (`prerequisites`).
+* _implicit rules_. When and how to remake classes of files based on their names.
+* _variable definitions_. Specifies a text string value for a variable.
+* _directives_. Special instructions:
+    * Read another makefile
+    * Decide whether to use or ignore a part of the makefile
+    * Define a variable from a verbatim string containing multiple lines
+* _comments_. They start with `#`. Applies to the whole line unless it ends with `\`. Within a recipe are passed to the shell.
+
+### Special splitting of lines
+
+```makefile
+var := one$\
+       word
+```
+
+Is equivalent to:
+
+```makefile
+var := oneword
+```
+
+## Makefile names
+
+`make` looks for:
+
+* GNUmakefile
+* makefile
+* Makefile
+
+For other names:
+
+> $ make -f name
+
+or
+
+> $ make --file=name
+
+You can specify several makefiles if you use more than one `-f` or `--file`.
+
+## Including makefles
+
+The `include` directive tells make to suspend reading the current makefile and read one or more other makefiles before continuing. When that is finished make resumes reading the makefile. Can include shell file name patterns.
+
+If you have three .mk files, _a.mk, b.mk, and c.mk_, and _$(bar)_ expands to _bish bash_ then:
+
+```makefile
+include foo *.mk $(bar)
+```
+
+Is equivalent to:
+
+```makefile
+include foo a.mk b.mk c.mk bin bash
+```
+
+Can be used when several programs are handled by individual makefiles in various directories but share variable definitions or pattern rules. Also when you want to generate prerequisites from source files automatically.
+
+If the file name doesn't start with a slash and is not found in the current directory, others will be searched. First any included with the option `-I` or `--include-dir`. Then the following in this order:
+
+* prefix/include (usually _/usr/local/include_)
+* /usr/gnu/include
+* /usr/local/include
+* /usr/include
+
+If the file can't be found a warning will be issued but make will continue. Once it has finished reading makefiles it will try again, only then it will fail with a fatal error.
+
+This error can be ignored with `-include filenames`. The warning will also be ignored.
+
+## Variable MAKEFILES
+
+If the variable is defined then its contents are treated as a list of makefiles preceeded by the `include` directive.
+
+## How `make` reads a makefile
+
+First phase:
+
+1. First it reads all the makefiles
+2. It internalizes all the variables, implicit and explicit rules.
+3. It builds a dependency graph of all the targets and their prerequisites.
+
+Second phase:
+
+* Using the internalized data it determines which targets need to be updated and run the recipes necessary to do it.
+
+Expansion is _immediate_ if it happens during the first phase. Otherwise is _deferred_.
+
+Deferred expansions are delayed until it is used.
+
+Conditional directives are parsed immediately.
+
+Rules are always expended as:
+
+```makefile
+immediate : immediate ; deferred
+    deferred
+```
+
+Meaning, target and prerequisites sections are expanded immediately. The recipe is always deferred.
+
+---
+
+Next: 3.8 How makefiles are parsed
 
