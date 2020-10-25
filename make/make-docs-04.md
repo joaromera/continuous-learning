@@ -65,5 +65,19 @@ $(OBJDIR):
 
 Now the rule to create the `objdir` directory will be run, if needed, before any `.o` isbuilt, but no `.o` will be built because the `objdir` directory timestamp changed.
 
+## Using wildcard characters in file names
+
+A file name can specify many files using _wildcards_, these are: `*`, `?`, `[...]` -the same as Bourne shell-.
+
+`~` at the beginning of a file: if alone or followed by a dash it represents the home directory: `~/bin` expands to `/home/you/bin`.
+
+If followed by a word, represents the home directory of the user named by that word: `~john/bin` expands to `/home/john/bin`.
+
+In windwos you can use the environment variable _HOME_.
+
+### Examples
+
+
+
 
 
