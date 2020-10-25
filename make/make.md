@@ -290,5 +290,63 @@ Meaning, target and prerequisites sections are expanded immediately. The recipe 
 
 ---
 
-Next: 3.8 How makefiles are parsed
+## How Makefiles are parsed
+
+GNU make parses line by line.
+
+1. Read a line, including backslash-escaped lines
+2. Remove comments
+3. If the line begins with the recipe prefix character and we are in a rule context, adds the line to the current recipe
+4. Expand elements of the line which appear in an _immediate_ expansion context
+5. Scan the line for a separator character to determine if is a macro or a rule
+6. Internalize the resulting operation and read the next line
+
+One consequence is that a macro can expand to a rule if it is one line long.
+
+## Secondary expansions
+
+Occurs if the special `.SECONDEXPANSION` target is defined.
+
+It must be defined before the first prerequisite list that uses it.
+
+If defined the it will happen at the end of the read-in phase and all the prerequisites of its targets are expanded a _second time_.
+
+Secondary expansion occurs for both expicit and implicit pattern rules.
+
+```makefile
+.SECONDEXPANSION:
+main_OBJS := main.o try.o test.o
+lib_OBJS := lib.o api.o
+
+main lib: $$($$@_OBJS)
+```
+
+After the initial expansion prerequisites of both `main` and `lib` targets will be `$($@_OBJS)`.
+
+_(The first $ is escaped)_.
+
+During secondary expansion, `$@` variable is set to the name of the target, so the expansion for main yields `$(main_OBJS)`, or `main.o try.o test.o`.
+
+The secondary of the lib target yields `$(lib_OBJS)`, or `lib.o api.o`.
+
+### Secondary expansion of explicit rules
+
+During secondary expansion of explicit rules:
+
+`$$@` and `$$%` evaluate to the file name of the target.
+
+`$$<` evaluates to the first prerequisite in the first rule for this target.
+
+`$$^` and `$$+` evaluate to the list of all prerequisites of rules _that have already appeared for the same target_.
+
+### For implicit rules
+
+...
+
+---
+
+
+
+
+
 
