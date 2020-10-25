@@ -344,9 +344,3 @@ During secondary expansion of explicit rules:
 ...
 
 ---
-
-
-
-
-
-
