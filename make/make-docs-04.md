@@ -77,7 +77,37 @@ In windwos you can use the environment variable _HOME_.
 
 ### Examples
 
+In the recipe of a rule, wildcards are expanded by the shell.
 
+```makefile
+clean:
+    rm -f *.o
+```
 
+In the prerequisites of a rule:
+
+```makefile
+print: *.c
+    lpr -p $?
+    touch print
+```
+
+The above example prints all the `.c` files that have changed since the last print.
+
+The _automatic variable_ `$?` is used to print only files that have changed.
+
+Wildcard expansion does not happen when defining variables. However if you use a variable with wildcards in a target or prerequisite, expansion will take place:
+
+```makefile
+objects = *.o
+```
+
+To set the variable to the expansion, instead use:
+
+```makefile
+objects := $(wildcard *.o)
+```
+
+### Pitfalls
 
 
