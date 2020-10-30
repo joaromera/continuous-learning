@@ -142,7 +142,7 @@ let none = plus_one(None);
 
 Matches are exhaustive, you can't ignore the `None` case above.
 
-### _ Placeholder
+### The `_` placeholder
 
 ```rust
 let some_u8_value = 0u8;
@@ -160,4 +160,14 @@ We can use `_` to match any value. It will match all the cases that aren't speci
 
 ---
 
-https://doc.rust-lang.org/book/ch06-03-if-let.html
+## Control flow with `if let`
+
+Less boilerplate code, not need to add `_ => ()` for just one variant:
+
+```rust
+if let Some(3) = some_u8_value {
+    println!("three");
+}
+```
+
+The `if let` pattern takes a patterna dn an expression separated by an equal sign. You lose the exhaustive checking that `match` enforces.
