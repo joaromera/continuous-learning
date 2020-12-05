@@ -21,21 +21,14 @@ int main()
 
     const int pattern_length = input.front().length();
 
-    const int column_increment = 3;
-    const int row_increment = 1;
-
     unsigned count = 0;
-    unsigned column = 0;
-    unsigned row = 0;
 
-    while (row < input.size())
+    for (int i = 0, j = 0; i < input.size(); i += 1, j += 3)
     {
-        if (input[row][column % pattern_length] == '#')
+        if (input[i][j % pattern_length] == '#')
         {
             ++count;
         }
-        column += column_increment;
-        row += row_increment;
     }
     std::cout << count << std::endl;
 }
