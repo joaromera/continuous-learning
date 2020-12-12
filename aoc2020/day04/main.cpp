@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <array>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -16,7 +17,7 @@ std::vector<std::string> loadInput()
     return strs;
 }
 
-std::string_view get_value(const std::string_view str, const std::string_view key)
+constexpr std::string_view get_value(const std::string_view str, const std::string_view key)
 {
     const auto pos = str.find(key);
 
@@ -28,7 +29,7 @@ std::string_view get_value(const std::string_view str, const std::string_view ke
     return str.substr(begin_value_pos, end_value_pos);
 }
 
-const std::vector<std::string> valid_passport_keys = {
+constexpr std::array valid_passport_keys = {
     "byr",
     "iyr",
     "eyr",
@@ -67,7 +68,7 @@ bool is_valid_passport(std::vector<std::string>::const_iterator begin, std::vect
     return all_keys_present(begin, end) && all_values_valid(begin, end);
 }
 
-const std::vector<std::string> test_input = {
+constexpr std::array test_input = {
     "ecl:gry pid:860033327 eyr:2020 hcl:#fffffd",
     "byr:1937 iyr:2017 cid:147 hgt:183cm",
     "",
