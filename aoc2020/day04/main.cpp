@@ -38,7 +38,7 @@ const std::vector<std::string> valid_passport_keys = {
     "pid"
 };
 
-bool is_valid_passport(std::vector<std::string>::const_iterator begin, std::vector<std::string>::const_iterator end)
+bool all_keys_present(std::vector<std::string>::const_iterator begin, std::vector<std::string>::const_iterator end)
 {
     return std::all_of(
         valid_passport_keys.cbegin(),
@@ -55,6 +55,16 @@ bool is_valid_passport(std::vector<std::string>::const_iterator begin, std::vect
             );
         }
     );
+}
+
+bool all_values_valid(std::vector<std::string>::const_iterator begin, std::vector<std::string>::const_iterator end)
+{
+    return true;
+}
+
+bool is_valid_passport(std::vector<std::string>::const_iterator begin, std::vector<std::string>::const_iterator end)
+{
+    return all_keys_present(begin, end) && all_values_valid(begin, end);
 }
 
 const std::vector<std::string> test_input = {
@@ -77,7 +87,7 @@ int main()
 {
     std::vector<std::string> input = loadInput(); input.push_back("");
 
-    std::vector<std::string>::const_iterator passport_beg = input.begin();
+    std::vector<std::string>::const_iterator passport_beg = input.cbegin();
 
     int count = 0;
 
