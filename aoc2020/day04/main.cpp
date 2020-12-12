@@ -31,42 +31,56 @@ constexpr std::string_view get_value(const std::string_view str, const std::stri
     return str.substr(begin_value_pos, end_value_pos);
 }
 
+auto valid_byr = [] (const std::string& str) {
+    return str.length() == 4 && std::stoi(str) >= 1920 && std::stoi(str) <= 2002;
+};
+
+auto valid_iyr = [] (const std::string& str) {
+    return str.length() == 4 && std::stoi(str) >= 2010 && std::stoi(str) <= 2020;
+};
+
+auto valid_eyr = [] (const std::string& str) {
+    return str.length() == 4 && std::stoi(str) >= 2020 && std::stoi(str) <= 2030;
+};
+
+auto valid_hgt = [] (const std::string& str) {
+    if (std::smatch base_match;
+        std::regex_match(str, base_match, std::regex("(\\d+)(in|cm)")))
+    {
+        if (base_match[2] == "in")
+        {
+            return std::stoi(base_match[1]) >= 59 && std::stoi(base_match[1]) <= 76;
+        }
+        else if (base_match[2] == "cm")
+        {
+            return std::stoi(base_match[1]) >= 150 && std::stoi(base_match[1]) <= 193;
+        }
+    }
+    return false;
+};
+
+auto valid_hcl = [] (const std::string& str) {
+    return std::regex_match(str, std::regex("#[0-9a-f]{6}"));
+};
+
+auto valid_ecl = [] (const std::string& str) {
+    return std::regex_match(str, std::regex("amb|blu|brn|gry|grn|hzl|oth"));
+};
+
+auto valid_pid = [] (const std::string& str) {
+    return std::regex_match(str, std::regex("\\d{9}"));
+};
+
 using validatorFunc = bool(*)(const std::string&);
 
 std::map<std::string, validatorFunc> keys_and_validators = {
-    {"byr", [] (const std::string& str) {
-        return str.length() == 4 && std::stoi(str) >= 1920 && std::stoi(str) <= 2002;
-    }},
-    {"iyr", [] (const std::string& str) {
-        return str.length() == 4 && std::stoi(str) >= 2010 && std::stoi(str) <= 2020;
-    }},
-    {"eyr", [] (const std::string& str) {
-        return str.length() == 4 && std::stoi(str) >= 2020 && std::stoi(str) <= 2030;
-    }},
-    {"hgt", [] (const std::string& str) {
-        if (std::smatch base_match;
-            std::regex_match(str, base_match, std::regex("(\\d+)(in|cm)")))
-        {
-            if (base_match[2] == "in")
-            {
-                return std::stoi(base_match[1]) >= 59 && std::stoi(base_match[1]) <= 76;
-            }
-            else if (base_match[2] == "cm")
-            {
-                return std::stoi(base_match[1]) >= 150 && std::stoi(base_match[1]) <= 193;
-            }
-        }
-        return false;
-    }},
-    {"hcl", [] (const std::string& str) {
-        return std::regex_match(str, std::regex("#[0-9a-f]{6}"));
-    }},
-    {"ecl", [] (const std::string& str) {
-        return std::regex_match(str, std::regex("amb|blu|brn|gry|grn|hzl|oth"));
-    }},
-    {"pid", [] (const std::string& str) {
-        return std::regex_match(str, std::regex("\\d{9}"));
-    }}
+    {"byr", valid_byr },
+    {"iyr", valid_iyr },
+    {"eyr", valid_eyr },
+    {"hgt", valid_hgt },
+    {"hcl", valid_hcl },
+    {"ecl", valid_ecl },
+    {"pid", valid_pid }
 };
 
 bool all_keys_present(std::vector<std::string>::const_iterator begin, std::vector<std::string>::const_iterator end)
@@ -100,8 +114,7 @@ bool all_values_valid(std::vector<std::string>::const_iterator begin, std::vecto
                 end,
                 [&kp] (const std::string &passport_data)
                 {
-                    std::string val (get_value(passport_data, kp.first));
-                    return kp.second(val);
+                    return kp.second(std::string(get_value(passport_data, kp.first)));
                 }
             );
         }
@@ -110,24 +123,12 @@ bool all_values_valid(std::vector<std::string>::const_iterator begin, std::vecto
 
 bool is_valid_passport(std::vector<std::string>::const_iterator begin, std::vector<std::string>::const_iterator end)
 {
-    return all_keys_present(begin, end) && all_values_valid(begin, end);
-}
+    // 1st problem
+    // return all_keys_present(begin, end);
 
-std::vector<std::string> test_input = {
-    "pid:087499704 hgt:74in ecl:grn iyr:2012 eyr:2030 byr:1980",
-    "hcl:#623a2f",
-    "",
-    "eyr:2029 ecl:blu cid:129 byr:1989",
-    "iyr:2014 pid:896056539 hcl:#a97842 hgt:165cm",
-    "",
-    "hcl:#888785",
-    "hgt:164cm byr:2001 iyr:2015 cid:88",
-    "pid:545766238 ecl:hzl",
-    "eyr:2022",
-    "",
-    "iyr:2010 hgt:158cm hcl:#b6652a ecl:blu byr:1944 eyr:2021 pid:093154719",
-    ""
-};
+    // 2nd problem
+    return all_values_valid(begin, end);
+}
 
 int main()
 {
