@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 #include <numeric>
 #include <string>
@@ -11,11 +12,8 @@ std::vector<std::string> parse_input()
     for (std::string line; getline(std::cin, line); )
         if (line.empty())
             ss << '\n';
-        // For this problem is better not to do this
-        // else
-        //     ss << ' ' << line;
         else
-            ss << line;
+            ss << ' ' << line;
 
     std::vector<std::string> lines;
     for (std::string line; getline(ss, line); )
@@ -26,16 +24,15 @@ std::vector<std::string> parse_input()
 
 int count_unique_chars(std::string str)
 {
-    std::sort(str.begin(), str.end());
-    auto last = std::unique(str.begin(), str.end());
+    std::string::iterator end_pos = std::remove(str.begin(), str.end(), ' ');
+    std::sort(str.begin(), end_pos);
+    auto last = std::unique(str.begin(), end_pos);
     str.erase(last, str.end());
     return str.length();
 }
 
-int main()
+void part_one(const std::vector<std::string> input)
 {
-    const std::vector<std::string> input = parse_input();
-
     const int result = std::accumulate(
         input.cbegin(),
         input.cend(),
@@ -47,4 +44,12 @@ int main()
     );
 
     std::cout << result << std::endl;
+}
+
+int main()
+{
+    const std::vector<std::string> input = parse_input();
+
+    part_one(input);
+
 }
