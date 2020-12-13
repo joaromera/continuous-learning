@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <iostream>
+#include <iterator>
 #include <numeric>
 #include <string>
 #include <sstream>
@@ -30,15 +31,30 @@ int count_unique_chars(std::string str)
     return std::distance(str.begin(), last);
 }
 
-void part_one(const std::vector<std::string> input)
+int count_intersection_chars(std::string sv)
+{
+    std::string str(sv);
+    auto spaces = std::count(str.begin(), str.end(), ' ');
+    std::string::iterator end_pos = std::remove(str.begin(), str.end(), ' ');
+    std::sort(str.begin(), end_pos);
+    auto last_unique = std::unique(str.begin(), end_pos);
+    str.erase(last_unique, str.end());
+    return std::accumulate(str.begin(), str.end(), 0, [&](auto accum, auto chr) {
+        return accum + (std::count(sv.cbegin(), sv.cend(), chr) / (spaces));
+    });
+}
+
+using countingFunc = int(*)(std::string);
+
+void solve_problem(const std::vector<std::string> input, countingFunc fun)
 {
     const int result = std::accumulate(
         input.cbegin(),
         input.cend(),
         0,
-        [] (auto accum, auto str)
+        [&fun] (auto accum, auto str)
         {
-            return accum + count_unique_chars(str);
+            return accum + fun(str);
         }
     );
 
@@ -48,7 +64,6 @@ void part_one(const std::vector<std::string> input)
 int main()
 {
     const std::vector<std::string> input = parse_input();
-
-    part_one(input);
-
+    solve_problem(input, count_unique_chars);
+    solve_problem(input, count_intersection_chars);
 }
