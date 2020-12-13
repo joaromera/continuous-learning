@@ -1,2 +1,5 @@
 *.pdf
 .vscode/
+aoc2020/links.md
+main
+*.out
