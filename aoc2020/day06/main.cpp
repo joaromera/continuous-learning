@@ -35,12 +35,12 @@ int count_intersection_chars(std::string sv)
 {
     // Count and remove spaces
     std::string str(sv);
-    auto spaces = std::count(str.begin(), str.end(), ' ');
+    const auto spaces = std::count(str.begin(), str.end(), ' ');
     std::string::iterator end_pos = std::remove(str.begin(), str.end(), ' ');
 
     // Eliminate duplicates
     std::sort(str.begin(), end_pos);
-    auto last_unique = std::unique(str.begin(), end_pos);
+    const auto last_unique = std::unique(str.begin(), end_pos);
     str.erase(last_unique, str.end());
 
     // Count appearences of unique chars in original string against spaces
