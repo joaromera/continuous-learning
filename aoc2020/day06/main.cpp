@@ -27,8 +27,7 @@ int count_unique_chars(std::string str)
     std::string::iterator end_pos = std::remove(str.begin(), str.end(), ' ');
     std::sort(str.begin(), end_pos);
     auto last = std::unique(str.begin(), end_pos);
-    str.erase(last, str.end());
-    return str.length();
+    return std::distance(str.begin(), last);
 }
 
 void part_one(const std::vector<std::string> input)
