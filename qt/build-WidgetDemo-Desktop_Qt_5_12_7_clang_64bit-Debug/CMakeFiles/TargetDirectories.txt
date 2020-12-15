@@ -1,4 +1,0 @@
-/Users/jromera/Development/learning/qt/build-WidgetDemo-Desktop_Qt_5_12_7_clang_64bit-Debug/CMakeFiles/rebuild_cache.dir
-/Users/jromera/Development/learning/qt/build-WidgetDemo-Desktop_Qt_5_12_7_clang_64bit-Debug/CMakeFiles/edit_cache.dir
-/Users/jromera/Development/learning/qt/build-WidgetDemo-Desktop_Qt_5_12_7_clang_64bit-Debug/CMakeFiles/WidgetDemo.dir
-/Users/jromera/Development/learning/qt/build-WidgetDemo-Desktop_Qt_5_12_7_clang_64bit-Debug/CMakeFiles/WidgetDemo_autogen.dir
