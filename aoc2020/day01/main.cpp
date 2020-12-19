@@ -14,18 +14,20 @@ std::vector<int> loadInput()
     return ints;
 }
 
+constexpr int TARGET = 2020;
+
 int main()
 {
     auto input = loadInput();
 
     for (int i = 0; i < input.size(); ++i)
         for (int j = i + 1; j < input.size(); ++j)
-            if (input[i] + input[j] == 2020)
+            if (input[i] + input[j] == TARGET)
                 std::cout << input[i] * input[j] << std::endl;
 
     for (int i = 0; i < input.size(); ++i)
         for (int j = i + 1; j < input.size(); ++j)
             for (int k = j + 1; k < input.size(); ++k)
-                if (input[i] + input[j] + input[k] == 2020)
+                if (input[i] + input[j] + input[k] == TARGET)
                     std::cout << input[i] * input[j] * input[k] << std::endl;
 }

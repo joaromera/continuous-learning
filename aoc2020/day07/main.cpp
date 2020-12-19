@@ -22,5 +22,4 @@ std::vector<std::string> parse_input()
 int main()
 {
     const std::vector<std::string> input = parse_input();
-
 }
