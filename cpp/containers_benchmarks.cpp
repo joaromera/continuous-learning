@@ -45,8 +45,7 @@ template<typename T>
 std::list<Clip> multi_lookup(T& container, const std::string &clip)
 {
     std::list<Clip> output;
-    auto [begin, end] = container.equal_range(clip);
-    while(begin != end)
+    for (auto [begin, end] = container.equal_range(clip); begin != end; )
     {
         output.push_front(begin->second);
         ++begin;
