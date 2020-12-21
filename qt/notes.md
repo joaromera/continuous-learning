@@ -19,3 +19,11 @@ connect(ui->pushButton, &QPushButton::clicked, [=](){
     ui->label->setText("New text");
 });
 ```
+
+## QWidget
+
+https://doc.qt.io/qt-6/qwidget.html
+
+Base class of all user interface objects. A widget that is not embedded in a parent widget is called a window.
+
+

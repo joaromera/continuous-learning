@@ -2,4 +2,5 @@
 .vscode/
 aoc2020/links.md
 main
+.DS_Store
 *.out
