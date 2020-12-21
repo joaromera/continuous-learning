@@ -3,4 +3,5 @@
 aoc2020/links.md
 main
 .DS_Store
+build/
 *.out
