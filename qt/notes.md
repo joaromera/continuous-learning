@@ -30,4 +30,6 @@ Base class of all user interface objects. A widget that is not embedded in a par
 
 Usually can contain: menu bar, toolbars, dock widgets, central widget, status bars... This class provides a main application window. Provides a framework for building an application's user interface. Can add to it QToolBars, QDockWdigets, QMenuBar, QStatusBar.
 
+## QMessageBox
 
+Provide information, ask questions, show critical or warning messages.
